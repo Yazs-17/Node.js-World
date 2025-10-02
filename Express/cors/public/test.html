@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Express CORS 测试页面</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			line-height: 1.6;
+			color: #333;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			background: white;
+			border-radius: 10px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+			overflow: hidden;
+		}
+
+		.header {
+			background: linear-gradient(135deg, #2c3e50, #3498db);
+			color: white;
+			padding: 30px;
+			text-align: center;
+		}
+
+		.header h1 {
+			font-size: 2.5em;
+			margin-bottom: 10px;
+		}
+
+		.header p {
+			font-size: 1.2em;
+			opacity: 0.9;
+		}
+
+		.content {
+			padding: 30px;
+		}
+
+		.test-section {
+			margin-bottom: 40px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			overflow: hidden;
+		}
+
+		.section-header {
+			background: #f8f9fa;
+			padding: 15px 20px;
+			border-bottom: 1px solid #ddd;
+			font-weight: bold;
+			font-size: 1.2em;
+			color: #2c3e50;
+		}
+
+		.section-content {
+			padding: 20px;
+		}
+
+		.button-group {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-bottom: 20px;
+		}
+
+		button {
+			background: linear-gradient(135deg, #3498db, #2980b9);
+			color: white;
+			border: none;
+			padding: 12px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.3s ease;
+			min-width: 120px;
+		}
+
+		button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+		}
+
+		button:active {
+			transform: translateY(0);
+		}
+
+		.btn-danger {
+			background: linear-gradient(135deg, #e74c3c, #c0392b);
+		}
+
+		.btn-danger:hover {
+			box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+		}
+
+		.btn-success {
+			background: linear-gradient(135deg, #27ae60, #229954);
+		}
+
+		.btn-success:hover {
+			box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+		}
+
+		.btn-warning {
+			background: linear-gradient(135deg, #f39c12, #e67e22);
+		}
+
+		.btn-warning:hover {
+			box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+		}
+
+		.result {
+			background: #f8f9fa;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			padding: 15px;
+			margin-top: 15px;
+			white-space: pre-wrap;
+			font-family: 'Courier New', monospace;
+			font-size: 13px;
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		.success {
+			background: #d4edda;
+			border-color: #c3e6cb;
+			color: #155724;
+		}
+
+		.error {
+			background: #f8d7da;
+			border-color: #f5c6cb;
+			color: #721c24;
+		}
+
+		.info {
+			background: #cce7ff;
+			border: 1px solid #b3d7ff;
+			color: #004085;
+			padding: 15px;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+
+		.status-indicator {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			margin-right: 8px;
+		}
+
+		.status-success {
+			background: #28a745;
+		}
+
+		.status-error {
+			background: #dc3545;
+		}
+
+		.status-warning {
+			background: #ffc107;
+		}
+
+		.cors-explanation {
+			background: #e9ecef;
+			padding: 20px;
+			border-radius: 8px;
+			margin-bottom: 30px;
+		}
+
+		.cors-explanation h3 {
+			color: #495057;
+			margin-bottom: 15px;
+		}
+
+		.cors-explanation ul {
+			padding-left: 20px;
+		}
+
+		.cors-explanation li {
+			margin-bottom: 8px;
+		}
+
+		input[type="text"],
+		input[type="url"] {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			font-size: 14px;
+			margin-bottom: 10px;
+		}
+
+		.flex-row {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
+		.flex-row input {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		@media (max-width: 768px) {
+			.button-group {
+				flex-direction: column;
+			}
+
+			button {
+				width: 100%;
+			}
+
+			.flex-row {
+				flex-direction: column;
+			}
+
+			.flex-row input {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<h1>🌐 Express CORS 测试中心</h1>
+			<p>测试不同的跨源资源共享场景</p>
+		</div>
+
+		<div class="content">
+			<div class="cors-explanation">
+				<h3>🔍 关于CORS测试</h3>
+				<ul>
+					<li><strong>同源测试:</strong> 当前页面URL与API URL相同时，不会触发CORS</li>
+					<li><strong>跨源测试:</strong> 使用不同端口或域名访问此页面来模拟跨源请求</li>
+					<li><strong>预检请求:</strong> 复杂请求会先发送OPTIONS请求进行预检</li>
+					<li><strong>凭据模式:</strong> 测试是否可以发送cookies和认证信息</li>
+				</ul>
+			</div>
+
+			<!-- 基本CORS测试 -->
+			<div class="test-section">
+				<div class="section-header">
+					📋 基本CORS测试
+				</div>
+				<div class="section-content">
+					<div class="info">
+						<strong>当前页面源:</strong> <span id="currentOrigin"></span><br>
+						<strong>API服务器:</strong> <span id="apiServer"></span>
+					</div>
+
+					<div class="button-group">
+						<button onclick="testSimpleRequest()" class="btn-success">简单GET请求</button>
+						<button onclick="testComplexRequest()" class="btn-warning">复杂POST请求</button>
+						<button onclick="testWithCredentials()" class="btn-warning">带凭据请求</button>
+						<button onclick="testPublicAPI()" class="btn-success">公开API</button>
+						<button onclick="testRestrictedAPI()" class="btn-danger">受限API</button>
+					</div>
+
+					<div id="basicResult" class="result"></div>
+				</div>
+			</div>
+
+			<!-- 自定义源测试 -->
+			<div class="test-section">
+				<div class="section-header">
+					🎯 自定义源测试
+				</div>
+				<div class="section-content">
+					<div class="info">
+						通过修改请求头来模拟不同源的请求
+					</div>
+
+					<div class="flex-row">
+						<input type="url" id="customOrigin" placeholder="输入自定义源，如: http://example.com:8080"
+							value="http://unauthorized-domain.com">
+						<button onclick="testCustomOrigin()" class="btn-warning">测试自定义源</button>
+					</div>
+
+					<div id="customResult" class="result"></div>
+				</div>
+			</div>
+
+			<!-- 不同方法测试 -->
+			<div class="test-section">
+				<div class="section-header">
+					🔧 HTTP方法测试
+				</div>
+				<div class="section-content">
+					<div class="info">
+						测试不同HTTP方法的CORS行为
+					</div>
+
+					<div class="button-group">
+						<button onclick="testMethod('GET')" class="btn-success">GET</button>
+						<button onclick="testMethod('POST')" class="btn-warning">POST</button>
+						<button onclick="testMethod('PUT')" class="btn-warning">PUT</button>
+						<button onclick="testMethod('DELETE')" class="btn-danger">DELETE</button>
+						<button onclick="testMethod('PATCH')" class="btn-warning">PATCH</button>
+					</div>
+
+					<div id="methodResult" class="result"></div>
+				</div>
+			</div>
+
+			<!-- 错误处理测试 -->
+			<div class="test-section">
+				<div class="section-header">
+					⚠️ 错误场景测试
+				</div>
+				<div class="section-content">
+					<div class="info">
+						测试各种CORS错误情况
+					</div>
+
+					<div class="button-group">
+						<button onclick="testUnauthorizedOrigin()" class="btn-danger">未授权源</button>
+						<button onclick="testInvalidMethod()" class="btn-danger">不支持的方法</button>
+						<button onclick="testMissingHeaders()" class="btn-danger">缺少必需头</button>
+						<button onclick="testNonExistentEndpoint()" class="btn-danger">不存在的端点</button>
+					</div>
+
+					<div id="errorResult" class="result"></div>
+				</div>
+			</div>
+
+			<!-- 实时监控 -->
+			<div class="test-section">
+				<div class="section-header">
+					📈 实时CORS监控
+				</div>
+				<div class="section-content">
+					<div class="info">
+						实时显示CORS请求的详细信息
+					</div>
+
+					<div class="button-group">
+						<button onclick="startMonitoring()" class="btn-success">开始监控</button>
+						<button onclick="stopMonitoring()" class="btn-danger">停止监控</button>
+						<button onclick="clearMonitoring()">清除日志</button>
+					</div>
+
+					<div id="monitorResult" class="result"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// 全局变量
+		let monitoringInterval = null;
+		const API_BASE = window.location.origin;
+
+		// 初始化页面信息
+		document.addEventListener('DOMContentLoaded', function () {
+			document.getElementById('currentOrigin').textContent = window.location.origin;
+			document.getElementById('apiServer').textContent = API_BASE;
+		});
+
+		// 通用请求函数
+		async function makeRequest (url, options = {}) {
+			const startTime = Date.now();
+
+			try {
+				const response = await fetch(url, {
+					mode: 'cors',
+					...options
+				});
+
+				const endTime = Date.now();
+				const data = await response.json();
+
+				return {
+					success: response.ok,
+					status: response.status,
+					statusText: response.statusText,
+					headers: Object.fromEntries(response.headers.entries()),
+					data: data,
+					responseTime: endTime - startTime,
+					url: url,
+					method: options.method || 'GET'
+				};
+			} catch (error) {
+				const endTime = Date.now();
+				return {
+					success: false,
+					error: error.message,
+					responseTime: endTime - startTime,
+					url: url,
+					method: options.method || 'GET'
+				};
+			}
+		}
+
+		// 格式化响应结果
+		function formatResult (result) {
+			const statusIcon = result.success ? '✅' : '❌';
+			const timestamp = new Date().toLocaleString();
+
+			let output = `${statusIcon} [${timestamp}] ${result.method} ${result.url}\n`;
+			output += `状态: ${result.status || 'ERROR'} ${result.statusText || ''}\n`;
+			output += `响应时间: ${result.responseTime}ms\n`;
+
+			if (result.success) {
+				output += `CORS头信息:\n`;
+				const corsHeaders = [
+					'access-control-allow-origin',
+					'access-control-allow-methods',
+					'access-control-allow-headers',
+					'access-control-allow-credentials',
+					'access-control-max-age'
+				];
+
+				corsHeaders.forEach(header => {
+					if (result.headers[header]) {
+						output += `  ${header}: ${result.headers[header]}\n`;
+					}
+				});
+
+				output += `\n响应数据:\n${JSON.stringify(result.data, null, 2)}\n`;
+			} else {
+				output += `错误: ${result.error}\n`;
+			}
+
+			return output;
+		}
+
+		// 显示结果
+		function showResult (elementId, result) {
+			const element = document.getElementById(elementId);
+			element.textContent = formatResult(result);
+			element.className = `result ${result.success ? 'success' : 'error'}`;
+		}
+
+		// 基本测试函数
+		async function testSimpleRequest () {
+			const result = await makeRequest(`${API_BASE}/api/simple`);
+			showResult('basicResult', result);
+		}
+
+		async function testComplexRequest () {
+			const result = await makeRequest(`${API_BASE}/api/complex`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Custom-Header': 'test'
+				},
+				body: JSON.stringify({
+					message: '这是一个复杂请求测试',
+					timestamp: new Date().toISOString()
+				})
+			});
+			showResult('basicResult', result);
+		}
+
+		async function testWithCredentials () {
+			const result = await makeRequest(`${API_BASE}/api/protected`, {
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Authorization': 'Bearer demo-token-12345'
+				}
+			});
+			showResult('basicResult', result);
+		}
+
+		async function testPublicAPI () {
+			const result = await makeRequest(`${API_BASE}/api/public`);
+			showResult('basicResult', result);
+		}
+
+		async function testRestrictedAPI () {
+			const result = await makeRequest(`${API_BASE}/api/restricted`);
+			showResult('basicResult', result);
+		}
+
+		// 自定义源测试
+		async function testCustomOrigin () {
+			const customOrigin = document.getElementById('customOrigin').value;
+			const result = await makeRequest(`${API_BASE}/api/simple`, {
+				headers: {
+					'Origin': customOrigin
+				}
+			});
+			showResult('customResult', result);
+		}
+
+		// HTTP方法测试
+		async function testMethod (method) {
+			let options = { method: method };
+
+			if (['POST', 'PUT', 'PATCH'].includes(method)) {
+				options.headers = {
+					'Content-Type': 'application/json'
+				};
+				options.body = JSON.stringify({
+					test: true,
+					method: method,
+					timestamp: new Date().toISOString()
+				});
+			}
+
+			const result = await makeRequest(`${API_BASE}/api/complex`, options);
+			showResult('methodResult', result);
+		}
+
+		// 错误测试函数
+		async function testUnauthorizedOrigin () {
+			const result = await makeRequest(`${API_BASE}/api/restricted`, {
+				headers: {
+					'Origin': 'http://malicious-site.com'
+				}
+			});
+			showResult('errorResult', result);
+		}
+
+		async function testInvalidMethod () {
+			const result = await makeRequest(`${API_BASE}/api/simple`, {
+				method: 'TRACE'
+			});
+			showResult('errorResult', result);
+		}
+
+		async function testMissingHeaders () {
+			const result = await makeRequest(`${API_BASE}/api/protected`);
+			showResult('errorResult', result);
+		}
+
+		async function testNonExistentEndpoint () {
+			const result = await makeRequest(`${API_BASE}/api/nonexistent`);
+			showResult('errorResult', result);
+		}
+
+		// 监控功能
+		function startMonitoring () {
+			if (monitoringInterval) {
+				stopMonitoring();
+			}
+
+			const monitorElement = document.getElementById('monitorResult');
+			monitorElement.textContent = '🔄 开始监控CORS请求...\n\n';
+			monitorElement.className = 'result';
+
+			let requestCount = 0;
+
+			monitoringInterval = setInterval(async () => {
+				requestCount++;
+				const result = await makeRequest(`${API_BASE}/api/public`);
+
+				const timestamp = new Date().toLocaleString();
+				const status = result.success ? '✅ 成功' : '❌ 失败';
+				const logEntry = `[${timestamp}] 请求 #${requestCount} - ${status} (${result.responseTime}ms)\n`;
+
+				monitorElement.textContent += logEntry;
+				monitorElement.scrollTop = monitorElement.scrollHeight;
+			}, 2000);
+		}
+
+		function stopMonitoring () {
+			if (monitoringInterval) {
+				clearInterval(monitoringInterval);
+				monitoringInterval = null;
+
+				const monitorElement = document.getElementById('monitorResult');
+				monitorElement.textContent += '\n🛑 监控已停止\n';
+			}
+		}
+
+		function clearMonitoring () {
+			const monitorElement = document.getElementById('monitorResult');
+			monitorElement.textContent = '';
+			monitorElement.className = 'result';
+		}
+
+		// 页面卸载时清理
+		window.addEventListener('beforeunload', function () {
+			if (monitoringInterval) {
+				clearInterval(monitoringInterval);
+			}
+		});
+	</script>
+</body>
+
+</html>
