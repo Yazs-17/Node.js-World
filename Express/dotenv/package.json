@@ -1,0 +1,19 @@
+{
+	"name": "dotenv",
+	"version": "1.0.0",
+	"description": "dotenv for express demo",
+	"main": "index.js",
+	"scripts": {
+		"dev": "cross-env NODE_ENV=development node src/server.js",
+		"test": "cross-env NODE_ENV=test node src/server.js",
+		"start": "cross-env NODE_ENV=production node src/server.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cross-env": "^10.1.0",
+		"dotenv": "^17.2.3",
+		"express": "^5.1.0"
+	}
+}
