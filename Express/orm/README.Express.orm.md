@@ -1,0 +1,2 @@
+## Description
+Sequelize vs Prisma
