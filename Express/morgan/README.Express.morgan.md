@@ -2,6 +2,8 @@
 
 HTTP 请求日志中间件。
 
+另见[winston](..\winston\README.Express.winston.md)
+
 可以在开发或者生产环境中方便记录请求信息（如 method、url、状态码、耗时等）
 
 > [!note]
