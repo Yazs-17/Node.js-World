@@ -1,6 +1,20 @@
 {
+  "name": "redis",
+  "version": "1.0.0",
+  "description": "redis相信已经很熟了，不多介绍。",
+  "main": "redis.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
-    "connect-redis": "^8.1.0",
+    "body-parser": "^2.2.0",
+    "connect-redis": "^7.1.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "ioredis": "^5.8.1"

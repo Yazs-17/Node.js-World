@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Redis Session Demo</title>
+</head>
+
+<body>
+	<h1>Redis 登录保持示例</h1>
+	<div id="status"></div>
+
+	<div id="login-form">
+		<input type="text" id="username" placeholder="用户名">
+		<input type="password" id="password" placeholder="密码">
+		<button onclick="login()">登录</button>
+	</div>
+
+	<div id="logout-section" style="display:none;">
+		<p>你好，<span id="user"></span>！</p>
+		<button onclick="logout()">退出登录</button>
+	</div>
+
+	<script src="main.js"></script>
+</body>
+
+</html>
