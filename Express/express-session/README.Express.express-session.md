@@ -2,6 +2,8 @@
 
 会话管理中间件
 
+> 本demo用 `express-session` 做了一个登陆保持的玩具
+
 ```bash
 npm install express-session
 
@@ -32,4 +34,4 @@ app.get('/', (req, res) => {
 
 `npm install connect-redis ioredis`
 
-生产环境建议搭配redis存储会话
+生产环境建议搭配redis等存储会话，做持久化

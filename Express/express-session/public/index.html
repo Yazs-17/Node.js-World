@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Express Session Demo</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			margin: 40px;
+		}
+
+		input {
+			margin: 4px;
+			padding: 4px;
+		}
+
+		button {
+			margin: 4px;
+			padding: 4px 10px;
+		}
+
+		pre {
+			background: #f6f6f6;
+			padding: 10px;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>登录演示 (express-session)</h2>
+
+	<div id="login-section">
+		<input type="text" id="username" placeholder="用户名 (admin)">
+		<input type="password" id="password" placeholder="密码 (123456)">
+		<button onclick="login()">登录</button>
+	</div>
+
+	<div id="status-section" style="margin-top:20px;">
+		<button onclick="check()">查看登录状态</button>
+		<button onclick="logout()">登出</button>
+	</div>
+
+	<pre id="output"></pre>
+
+	<script>
+		const output = document.getElementById('output');
+
+		function log (msg) {
+			output.textContent = typeof msg === 'string' ? msg : JSON.stringify(msg, null, 2);
+		}
+
+		async function login () {
+			const username = document.getElementById('username').value;
+			const password = document.getElementById('password').value;
+			const res = await fetch('/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include', // ✅ 关键：携带 cookie
+				body: JSON.stringify({ username, password })
+			});
+			log(await res.json());
+		}
+
+		async function check () {
+			const res = await fetch('/profile', {
+				credentials: 'include' // ✅ 保持登录状态
+			});
+			log(await res.json());
+		}
+
+		async function logout () {
+			const res = await fetch('/logout', {
+				method: 'POST',
+				credentials: 'include'
+			});
+			log(await res.json());
+		}
+	</script>
+</body>
+
+</html>

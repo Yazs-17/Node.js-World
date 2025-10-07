@@ -1,0 +1,16 @@
+{
+	"name": "express-session",
+	"version": "1.0.0",
+	"description": "会话管理中间件",
+	"license": "ISC",
+	"author": "",
+	"type": "commonjs",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"express": "^5.1.0",
+		"express-session": "^1.18.2"
+	}
+}
