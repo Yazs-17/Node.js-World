@@ -1,7 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const cors = require("cors");
 const redisClient = require("./redis");
 
@@ -14,7 +14,7 @@ app.use(cors({
 	credentials: true
 }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static("public"));
 
 // Redis 存储 session
