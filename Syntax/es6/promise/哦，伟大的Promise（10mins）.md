@@ -159,3 +159,8 @@ getData('<url1>')
 		console.log(data)
 	})
 ```
+
+### 5. 注意事项
+
+1. await & async 必须搭配Promise， [点击了解](../async&await)
+2. 
