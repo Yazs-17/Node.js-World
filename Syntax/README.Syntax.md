@@ -1,3 +1,3 @@
 ## Main
 
-JS/TS 语法
+`node.[JS/TS]` 语法
