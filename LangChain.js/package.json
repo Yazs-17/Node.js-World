@@ -8,7 +8,9 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lab1": "node -r ./.env Basic/llm.js",
 		"lab2": "node -r ./.env llm_prompt/prompt_templates.js",
-		"lab3": "node -r ./.env OutputParsers/output_parser.js"
+		"lab3": "node -r ./.env OutputParsers/output_parser.js",
+		"lab4": "node -r ./.env DocumentSplit(rag)/retrieval_chain.js",
+		"lab5": "node -r ./.env Chatbot_tools/agent.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -17,6 +19,7 @@
 		"@langchain/core": "^1.0.5",
 		"@langchain/ollama": "^1.0.1",
 		"dotenv": "^17.2.3",
+		"langchain": "^1.0.4",
 		"zod": "^4.1.12"
 	}
 }

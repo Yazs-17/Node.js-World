@@ -6,7 +6,7 @@ nvm install 20.19.5
 ```
   - packages
   ```bash
-  pnpm add @langchain/ollama fs-extra dotenv @langchain/core zod
+  pnpm add @langchain/ollama fs-extra dotenv @langchain/core zod langchain
   ```
 
 - ollama
