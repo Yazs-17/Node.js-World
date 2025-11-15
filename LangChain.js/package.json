@@ -1,0 +1,22 @@
+{
+	"name": "langchain",
+	"version": "1.0.0",
+	"description": "- node\r ```bash\r nvm install \r ```\r - packages\r ```bash\r pnpm add \r ```",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lab1": "node -r ./.env Basic/llm.js",
+		"lab2": "node -r ./.env llm_prompt/prompt_templates.js",
+		"lab3": "node -r ./.env OutputParsers/output_parser.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@langchain/core": "^1.0.5",
+		"@langchain/ollama": "^1.0.1",
+		"dotenv": "^17.2.3",
+		"zod": "^4.1.12"
+	}
+}
