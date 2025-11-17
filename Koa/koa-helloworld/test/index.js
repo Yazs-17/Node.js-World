@@ -14,7 +14,7 @@ function loadJar () {
 		try {
 			const json = JSON.parse(fs.readFileSync(JAR_FILE, 'utf8'));
 			jar.restoreSync(json);
-		} catch {}
+		} catch { }
 	}
 	return jar;
 }
