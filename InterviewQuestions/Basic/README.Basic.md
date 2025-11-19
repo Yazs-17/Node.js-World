@@ -1,0 +1,1 @@
+# About some basic syntax knowledge for Node.js
